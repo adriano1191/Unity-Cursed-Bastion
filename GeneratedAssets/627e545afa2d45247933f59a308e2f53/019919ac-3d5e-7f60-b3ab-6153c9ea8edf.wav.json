@@ -1,0 +1,13 @@
+{
+    "asset": "627e545afa2d45247933f59a308e2f53",
+    "fileName": "019919ac-3d5e-7f60-b3ab-6153c9ea8edf.wav",
+    "prompt": "Crossbow shot one-shot SFX: tight wooden stock creak + metal latch click + tense string snap/twang + short bolt whoosh. Medieval, realistic, no gunpowder. Close-mic perspective, dry, no reverb tail. 0.8 s, mono, 44.1 kHz, peak −1 dBFS. Clean start/end, trimmed at zero-crossing.",
+    "negativePrompt": "no firearms bang, no laser, no synth zap, no crowd, no ambience.",
+    "model": "0ee39b33-2893-4e0f-8c46-0e0bdd4eda85",
+    "modelName": "Text to Sound",
+    "customSeed": -1,
+    "w3CTraceId": "bb8da312c10b4b218b45b0fa824200c3",
+    "duration": 1.0,
+    "autoTrim": true,
+    "hasReference": false
+}

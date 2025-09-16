@@ -1,0 +1,13 @@
+{
+    "asset": "77797ab4b832ebd438916ac8d17248b7",
+    "fileName": "019914b3-dec8-76f9-8e23-8b0800977353.wav",
+    "prompt": "shoot crossbow retri game",
+    "negativePrompt": "",
+    "model": "0ee39b33-2893-4e0f-8c46-0e0bdd4eda85",
+    "modelName": "Text to Sound",
+    "customSeed": -1,
+    "w3CTraceId": "7092c614354b24dc193802864f099d66",
+    "duration": 2.0,
+    "autoTrim": true,
+    "hasReference": false
+}
