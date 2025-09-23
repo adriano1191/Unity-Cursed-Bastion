@@ -7,6 +7,7 @@ public class MonsterHealth : MonoBehaviour
     public int maxHealth { get; private set; } = 0;
     AudioSource sfx;
     [Range(0f, 1f)] float volume = 1f;
+    SpawnerManager spawnerManager;
 
     private MonsterStats monsterStats;
 
@@ -25,12 +26,15 @@ public class MonsterHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+
         }
     }   
 
     private void Die()
     {
         // Logika œmierci potwora (np. animacja, usuniêcie z gry)
+        if (!spawnerManager) spawnerManager = FindFirstObjectByType<SpawnerManager>();
+        spawnerManager?.RemoveEnemy();
         Debug.Log($"{gameObject.name} has died.");
         Destroy(gameObject);
     }

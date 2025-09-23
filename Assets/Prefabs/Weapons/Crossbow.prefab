@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 7920805237045684872}
   - component: {fileID: -1225340371438402575}
   - component: {fileID: 3567203281546213491}
+  - component: {fileID: 5519154467958736036}
   m_Layer: 7
   m_Name: Crossbow
   m_TagString: Untagged
@@ -236,13 +237,34 @@ MonoBehaviour:
   player: {fileID: 0}
   muzzle: {fileID: 4312894987331513338}
   boltPrefab: {fileID: 3376025581238285574, guid: caa8ec7beb32fbc409e6abf9fdddef92, type: 3}
+  closeTarget: {fileID: 0}
   playerInventory: {fileID: 0}
+  playerStats: {fileID: 0}
   orbitRadius: 0.8
   followSpeed: 7
   boltSpeed: 20
+  baseFireRate: 0.4
   fireRate: 1
+  autoAim: 1
   autoShot: 1
   sfx: {fileID: 0}
   shotClips:
   - {fileID: 8300000, guid: 627e545afa2d45247933f59a308e2f53, type: 3}
   volume: 1
+--- !u!114 &5519154467958736036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6419959157165128908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53bcedf9bc60e1c4e81603f5d167be74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FindCloseTarget
+  origin: {fileID: 0}
+  range: 12
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 512

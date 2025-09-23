@@ -4,9 +4,12 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private float baseSpeed = 5f;
     [SerializeField] private float speed = 5f;
     [SerializeField] private SpriteRenderer gfx;
     Rigidbody2D rb;
+    [SerializeField] PlayerStats playerStats;
+    [SerializeField] private float speedPerAgility = 0.1f; // Prędkość zwiększona o każdą jednostkę zręczności
     public Vector2 move; // wype�niane przez akcj� "Move"
     // Start is called before the first frame update
 
@@ -15,16 +18,17 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
-    void Start()
+    void OnEnable()
     {
-            
+        if (!playerStats) { playerStats = GetComponent<PlayerStats>(); }
+        if (playerStats != null)
+        {
+            playerStats.AgilityChanged += OnAgilityChanged; // subskrybuj zdarzenie zmiany zręczności
+            OnAgilityChanged(0, playerStats.Agility); // inicjalne ustawienie speed na podstawie aktualnej zręczności
+            //Debug.Log($"PlayerHealth: Initial maxHealth set to {speed} based on Strength {playerStats.Agility}");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
 
     void FixedUpdate()
     {
@@ -52,5 +56,12 @@ public class PlayerMovement : MonoBehaviour
         else if (move.x < 0 && gfx.flipX) gfx.flipX = false;
         //gfx.flipX = !gfx.flipX;
 
+    }
+
+    public void OnAgilityChanged(int oldAgility, int newAgility)
+    {
+        // Załóżmy, że każda jednostka zręczności zwiększa prędkość o 0.5f
+        speed = baseSpeed + (newAgility * speedPerAgility);
+        Debug.Log($"PlayerMovement: Speed updated to {speed} based on Agility {newAgility}");
     }
 }

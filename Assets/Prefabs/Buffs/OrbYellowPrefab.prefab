@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4907383287172862238}
   - component: {fileID: 5284148043040796752}
   - component: {fileID: 1600992037081159295}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OrbYellowPrefab
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

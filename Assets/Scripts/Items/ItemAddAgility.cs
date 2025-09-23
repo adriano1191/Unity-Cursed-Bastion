@@ -1,19 +1,18 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/Effects/Add Strength (Flat)")]
-public class ItemAddStrength : ItemEffect
+[CreateAssetMenu(menuName = "Items/Effects/Add Agility (Flat)")]
+
+public class ItemAddAgility : ItemEffect
 {
     public override void Apply(PlayerStats playerStats, PlayerHealth playerHealth, int stacks, float magnitude)
     {
         int add = Mathf.RoundToInt(magnitude) * stacks;
-       //playerStats.AddStrength(add);
-       playerStats.AddStats(PlayerStats.StatType.Strength, add);
+        playerStats.AddStats(PlayerStats.StatType.Agility, add);
     }
 
     public override void Remove(PlayerStats playerStats, PlayerHealth playerHealth, int stacks, float magnitude)
     {
         int sub = Mathf.RoundToInt(magnitude) * stacks;
-        //playerStats.AddStrength(-sub);
-        playerStats.AddStats(PlayerStats.StatType.Strength, -sub);
+        playerStats.AddStats(PlayerStats.StatType.Agility, -sub);
     }
 }

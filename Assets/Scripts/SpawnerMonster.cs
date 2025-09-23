@@ -8,18 +8,18 @@ public class SpawnerMonster : MonoBehaviour
     public float spawnInterval = 3f;
     public float spawnIntervalRandom = 3f;
     private float spawnRandomTimer = 0f;
-    public int maxMonsters = 20;
     private float timer;
-    public int currentMonsterCount = 0;
     private Transform playerTransform;
     public float spawnRadius = 2f;
     public bool showRayCast = false;
+    public SpawnerManager spawnerManager;
 
 
     private void Awake()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         spawnRandomTimer = Random.Range(0f, spawnIntervalRandom); //wyliczanie losowego czasu na start
+        if(!spawnerManager) spawnerManager = FindFirstObjectByType<SpawnerManager>();
 
     }
 
@@ -48,12 +48,13 @@ public class SpawnerMonster : MonoBehaviour
         //Vector2 spawnPosition = (Vector2)transform.position;
         timer += Time.deltaTime;
         float spawnTimer = spawnInterval + spawnRandomTimer;
-        if (timer >= spawnTimer && currentMonsterCount < maxMonsters && distanceToPlayer >= spawnRadius*2)
+        if (timer >= spawnTimer && spawnerManager.currentEnemies < spawnerManager.maxEnemies && distanceToPlayer >= spawnRadius*2)
         {
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
             Vector2 spawnPosition = randomDirection * spawnRadius;
             Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
-            currentMonsterCount++;
+            //currentMonsterCount++;
+            spawnerManager.AddEnemy();
             timer = 0f;
             spawnRandomTimer = Random.Range(0f, spawnIntervalRandom);
            // Debug.Log($"Spawned monster at {spawnPosition}. Current count: {currentMonsterCount}");
