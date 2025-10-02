@@ -1,0 +1,13 @@
+{
+    "asset": "a629c12dd73f98f468aeb6c60b9e5165",
+    "fileName": "01997b13-b31e-77ff-9521-2e04884793ab.wav",
+    "prompt": "collect points",
+    "negativePrompt": "",
+    "model": "0ee39b33-2893-4e0f-8c46-0e0bdd4eda85",
+    "modelName": "",
+    "customSeed": -1,
+    "w3CTraceId": "e4e1c331cd5e5b4566beabc517de4a56",
+    "duration": 0.6530612111091614,
+    "autoTrim": true,
+    "hasReference": true
+}

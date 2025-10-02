@@ -47,7 +47,15 @@ MonoBehaviour:
   monsterPrefab: {fileID: 6785981400530881405, guid: 699e164226e809d44b91ad6aed85a493, type: 3}
   spawnInterval: 3
   spawnIntervalRandom: 3
-  maxMonsters: 20
-  currentMonsterCount: 0
   spawnRadius: 2
   showRayCast: 1
+  spawnerManager: {fileID: 0}
+  monsters:
+  - monsterPrefab: {fileID: 6785981400530881405, guid: 699e164226e809d44b91ad6aed85a493, type: 3}
+    dificultyLevel: 1
+  - monsterPrefab: {fileID: 6785981400530881405, guid: d8457601e08b85d45b904b1254e00fc5, type: 3}
+    dificultyLevel: 5
+  - monsterPrefab: {fileID: 6785981400530881405, guid: d0a1b6a3389ca2b47a7bef1e809aaa13, type: 3}
+    dificultyLevel: 15
+  - monsterPrefab: {fileID: 6785981400530881405, guid: abde2d06d34fa6f42bc4848670eb9108, type: 3}
+    dificultyLevel: 15

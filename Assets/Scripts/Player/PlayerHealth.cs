@@ -8,6 +8,8 @@ public class PlayerHealth : MonoBehaviour
     public int MaxHealth => maxHealth;
     [field: SerializeField] public int CurrentHealth { get; private set; }
 
+    public GameObject bloodHit;
+
     void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
@@ -50,6 +52,10 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         CurrentHealth -= damage;
+        if (bloodHit)
+        {
+            Instantiate(bloodHit, transform.position, Quaternion.identity);
+        }
         if (CurrentHealth <= 0)
         {
             Die();

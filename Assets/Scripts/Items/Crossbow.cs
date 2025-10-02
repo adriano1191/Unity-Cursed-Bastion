@@ -38,7 +38,7 @@ public class Crossbow : MonoBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= nextShotTime)
         {
             var p = Instantiate(boltPrefab, muzzle.position, Quaternion.identity);
-            p.Fire(dir, boltSpeed);
+            //p.Fire(dir, boltSpeed);
             nextShotTime = Time.time + fireRate;
         }
     }

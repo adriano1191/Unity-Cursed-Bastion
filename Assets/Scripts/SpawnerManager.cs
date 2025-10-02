@@ -4,6 +4,7 @@ public class SpawnerManager : MonoBehaviour
 {
 
     public int maxEnemies = 2;
+    public int difficultyLevel = 1;
     public int currentEnemies = 0;
     public int killCount = 0;
     public float timer = 0f;
@@ -41,6 +42,7 @@ public class SpawnerManager : MonoBehaviour
         {
             maxEnemies += 2;
             nextTick += interval;
+            difficultyLevel++;
         }
     }
 

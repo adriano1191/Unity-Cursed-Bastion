@@ -52,8 +52,8 @@ public class PlayerMovement : MonoBehaviour
         //var scale = gfx.localScale;
         //scale.x *= -1;
         //gfx.localScale = scale;
-        if (move.x > 0 && !gfx.flipX) gfx.flipX=true;
-        else if (move.x < 0 && gfx.flipX) gfx.flipX = false;
+        if (move.x < 0 && !gfx.flipX) gfx.flipX=true;
+        else if (move.x > 0 && gfx.flipX) gfx.flipX = false;
         //gfx.flipX = !gfx.flipX;
 
     }

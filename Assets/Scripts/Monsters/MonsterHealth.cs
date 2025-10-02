@@ -8,6 +8,10 @@ public class MonsterHealth : MonoBehaviour
     AudioSource sfx;
     [Range(0f, 1f)] float volume = 1f;
     SpawnerManager spawnerManager;
+    public GameObject xpPrefab;
+    public GameObject bloodPrefab;
+    public GameObject bloodHit;
+    public bool IsDead => currentHealth <= 0;
 
     private MonsterStats monsterStats;
 
@@ -19,15 +23,30 @@ public class MonsterHealth : MonoBehaviour
         sfx = GetComponent<AudioSource>();
     }
 
-    public void TakeDamage(int damage)
+    public bool TakeDamage(int damage)
     {
+        if (IsDead) return false;
         currentHealth -= damage;
+        if (bloodHit)
+        {
+            Instantiate(bloodHit, transform.position, Quaternion.identity);
+        }
         //OnHitSFX();
         if (currentHealth <= 0)
         {
+            if (xpPrefab)
+            {
+                DropXp(xpPrefab, transform.position);
+            }
+            if (bloodPrefab)
+            {
+                Instantiate(bloodPrefab, transform.position, Quaternion.identity);
+            }
+            GetComponent<LootDropper>()?.Drop();
             Die();
-
+            return true;
         }
+        return false;
     }   
 
     private void Die()
@@ -45,5 +64,14 @@ public class MonsterHealth : MonoBehaviour
         sfx.pitch = Random.Range(0.8f, 1.2f);
         sfx.PlayOneShot(sfx.clip, volume);
 
+    }
+
+    public void DropXp(GameObject itemPrefab, Vector3 position)
+    {
+        for (int i = 0; i < Random.Range(1, 3); i++) // losowa liczba przedmiotów do upuszczenia (1-3)
+        {
+            position = Random.insideUnitSphere * 0.8f + position; // losowa pozycja w promieniu 0.5 jednostki
+            Instantiate(itemPrefab, position, Quaternion.identity);
+        }
     }
 }

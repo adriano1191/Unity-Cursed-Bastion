@@ -19,11 +19,12 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] int baseEndurance = 5;
     [SerializeField] int baseLuck = 5;
 
+
     [Header("Secondary Stats")]
     public float moveSpeed = 5f;
     public int attackPower = 20;
-    public float baseAttackSpeed = 1f;
-    public float attackSpeed = 1f; // attacks per second
+    [SerializeField] float baseAttackSpeed = 1f;
+    //public float attackSpeed = 1f; // attacks per second
     public float attackSpeedMultiplierPerAgility = 0.02f; // ka¿dy punkt zrêcznoœci zwiêksza prêdkoœæ ataku o 2%
 
 
@@ -31,18 +32,31 @@ public class PlayerStats : MonoBehaviour
     public event Action<int, int> StrengthChanged; // (oldStr, newStr)
     public int Agility => baseAgility;
     public event Action<int, int> AgilityChanged; // (oldAg, newAg)
+    public int Intellect => baseIntellect;
+    public int CurrentXP => currentXP;
+    public event Action<int, int> XpChanged; // (oldXp, newXp)
+    public float AttackSpeed => baseAttackSpeed;
+    public event Action<float, float> attackSpeedChange; 
+
 
     public enum StatType
     {
         Strength,
         Agility,
-        Intellect
+        Intellect,
+        Experience,
+        AttackSpeed
     }
 
     private void OnEnable()
     {
         AgilityChanged += OnAgilityChanged; // subskrybuj zdarzenie zmiany zrêcznoœci
         OnAgilityChanged(0, Agility); // inicjalne ustawienie speed na podstawie aktualnej zrêcznoœci
+        attackSpeedChange += OnAttackSpeedChanged;
+        OnAttackSpeedChanged(0, AttackSpeed);
+
+        //XpChanged += OnExperienceChanged;
+        //OnExperienceChanged(0, CurrentXP);
     }
 
     public void AddStats(StatType stat, int value)
@@ -64,6 +78,18 @@ public class PlayerStats : MonoBehaviour
                 break;
             case StatType.Intellect:
                 baseIntellect += value;
+                break;
+            case StatType.Experience:
+                int oldExp = currentXP;
+                currentXP += value;
+                XpChanged?.Invoke(oldExp, currentXP);
+                Debug.Log($"PlayerStats: Xp changed from {oldExp} to {currentXP}");
+                break;
+            case StatType.AttackSpeed:
+                float oldAttackSpeed = baseAttackSpeed;
+                baseAttackSpeed -= value;
+                attackSpeedChange?.Invoke(oldAttackSpeed, baseAttackSpeed);
+                Debug.Log($"PlayerStats: Attack Speed changed from {oldAttackSpeed} to {baseAttackSpeed}");
                 break;
             default:
                 Debug.LogWarning("Nieznany typ statystyki!");
@@ -94,6 +120,20 @@ public class PlayerStats : MonoBehaviour
                 if (value == baseIntellect) return;
                 baseIntellect = value;
                 break;
+            case StatType.Experience:
+                if (value == currentXP) return;
+                int oldExp = currentXP;
+                currentXP = value;
+                AgilityChanged?.Invoke(oldExp, currentXP);
+                Debug.Log($"PlayerStats: XP set from {oldExp} to {currentXP}");
+                break;
+            case StatType.AttackSpeed:
+                if (value == baseAttackSpeed) return;
+                float oldAttackSpeed = baseAttackSpeed;
+                baseAttackSpeed = value;
+                attackSpeedChange?.Invoke(oldAttackSpeed, baseAttackSpeed);
+                Debug.Log($"PlayerStats: Attack Speed set from {oldAttackSpeed} to {baseAttackSpeed}");
+                break;
             default:
                 Debug.LogWarning("Nieznany typ statystyki!");
                 break;
@@ -105,8 +145,21 @@ public class PlayerStats : MonoBehaviour
     public void OnAgilityChanged(int oldAgility, int newAgility)
     {
         // Za³ó¿my, ¿e ka¿da jednostka zrêcznoœci zwiêksza prêdkoœæ o 0.5f
-        attackSpeed = attackSpeed - (baseAttackSpeed * attackSpeedMultiplierPerAgility);
-        
+        //attackSpeed = attackSpeed - (baseAttackSpeed * attackSpeedMultiplierPerAgility);
+        float oldAttackSpeed = AttackSpeed;
+        float newAttackSpeed = oldAttackSpeed - (newAgility * attackSpeedMultiplierPerAgility);
+        //Debug.Log($"Calculating new Attack Speed: {oldAttackSpeed} - ({newAgility} * {attackSpeedMultiplierPerAgility}) = {newAttackSpeed}");
+        attackSpeedChange?.Invoke(oldAttackSpeed, newAttackSpeed);
+        //Debug.Log($"Agility changed from {oldAgility} to {newAgility}, Attack Speed updated from {oldAttackSpeed} to {newAttackSpeed}");
+
+    }
+
+    public void OnAttackSpeedChanged(float oldAttackSpeed, float newAttackSpeed)
+    {
+
+        // Tutaj mo¿esz dodaæ logikê, która ma siê wykonaæ po zmianie prêdkoœci ataku
+
+        //Debug.Log($"Attack Speed changed from {oldAttackSpeed} to {newAttackSpeed}");
     }
 
 
