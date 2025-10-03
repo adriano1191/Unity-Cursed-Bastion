@@ -60,6 +60,7 @@ public class WeaponStats : MonoBehaviour
     /// Backward-compat convenience: attacks per second derived from cooldown.
     /// </summary>
     public float AttackSpeed => 1f / AttackCooldownSeconds;
+    public float AttackSpeedFactor => attackSpeedFactor;
 
     /// <summary>
     /// Direction the weapon should aim at (world-space, normalized). Set by hover/aim systems.

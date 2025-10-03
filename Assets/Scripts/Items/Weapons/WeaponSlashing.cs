@@ -24,11 +24,11 @@ public class WeaponSlashing : MonoBehaviour
     [SerializeField] private Inventory playerInventory;
 
     [Header("Fly")]
-    [SerializeField] float moveSpeed = 10f;
+    [SerializeField] float baseMoveSpeed = 10f;
     [SerializeField] float standoff = 2f; // odległość od celu
 
     [Header("Arm")]
-    [SerializeField] private float speed = 50f;
+    [SerializeField] private float baseSpeed = 50f;
     [SerializeField] private float armRise = 140f;
     [SerializeField] private float armDown = 0f;
     [SerializeField] private float armReset = 90f;
@@ -36,7 +36,7 @@ public class WeaponSlashing : MonoBehaviour
 
     [Header("Weapon")]
     [SerializeField] private Transform weapon;
-    [SerializeField] private float weaponSpeed = 50f;
+    [SerializeField] private float baseWeaponSpeed = 50f;
     [SerializeField] private float weaponRise = 140f;
     [SerializeField] private float weaponDown = 0f;
     [SerializeField] private float weaponReset = 90f;
@@ -162,12 +162,19 @@ public class WeaponSlashing : MonoBehaviour
 
     }
 
+    public float SpeedFactor(float baseValue)
+    {
+        float speed = baseValue / weaponStats.AttackSpeedFactor;
+        return speed;
+    }
+
     public void ArmAttackAnimation()
     {
+        float speed = SpeedFactor(baseSpeed);
+        float weaponSpeed = SpeedFactor(baseWeaponSpeed);
 
-
-            //bool reached = false; //sprawdz czy doszło do kąta ataku
-            //Arm rotation
+        //bool reached = false; //sprawdz czy doszło do kąta ataku
+        //Arm rotation
         float currentArm = transform.localEulerAngles.z;
         float nextZArm = Mathf.MoveTowardsAngle(currentArm, targetAngle, speed * Time.deltaTime);
         var e = transform.localEulerAngles;
@@ -259,6 +266,7 @@ public class WeaponSlashing : MonoBehaviour
 
         if (isReturning)
         {
+            float moveSpeed = SpeedFactor(baseMoveSpeed);
             //transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPostion, moveSpeed * Time.deltaTime);
             Vector3 homeWorld = _parent ? _parent.TransformPoint(_startLocal) : _startLocal;
             transform.position = Vector3.MoveTowards(transform.position, homeWorld, moveSpeed * Time.deltaTime);
@@ -274,6 +282,7 @@ public class WeaponSlashing : MonoBehaviour
         }
         else if(!isReturning)
         {
+            float moveSpeed = SpeedFactor(baseMoveSpeed);
             Vector3 stopPos = to - dir.normalized * standoff;
             transform.position = Vector3.MoveTowards(from, stopPos, moveSpeed * Time.deltaTime);
             if (transform.position == stopPos)
