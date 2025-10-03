@@ -22,7 +22,24 @@ public class WeaponStats : MonoBehaviour
     [Tooltip("true = auto-aims nearest enemy, false = aim at mouse")][SerializeField] private bool autoAim = true;
     [SerializeField] private bool autoAttack = true;
 
-    [Tooltip("Base cooldown of this weapon in seconds per attack (e.g., 2.0s for crossbow: one shot every 2 seconds)")]
+    
+    public enum WeaponMainStat
+    {
+        [InspectorName("Siła")] Strength,
+        [InspectorName("Zręczność")] Agility,
+        [InspectorName("Inteligencja")] Intellect
+    }
+    [Tooltip("Main stat that scales this weapon's damage.")] [SerializeField] private WeaponMainStat mainStat = WeaponMainStat.Strength;
+
+    [SerializeField] private int baseDamage = 10;
+    public WeaponMainStat MainStat => mainStat;
+    [SerializeField, Min(0f)] private float scalingDamage = 0.1f;
+    [SerializeField] float flatBonusDamage = 0f;
+    [SerializeField] float percentBonusDamage = 0f;
+
+
+
+    [Tooltip("Base cooldown of this weapon in seconds per attack (e.g., 2.0s for weapon: one shot every 2 seconds)")]
     [Min(0.01f)]
     [FormerlySerializedAs("baseWeaponAttackSpeed")] // migrate old serialized field
     [SerializeField] private float baseAttackCooldownSeconds = 2.0f; // seconds/attack (SPA)
@@ -127,4 +144,23 @@ public class WeaponStats : MonoBehaviour
         attackSpeedFactor = Mathf.Max(minFactor, newValue);
     }
     #endregion
+
+    float GetMainStat()
+    {
+        return mainStat switch
+        {
+            WeaponMainStat.Strength => playerStats.Strength,
+            WeaponMainStat.Agility => playerStats.Agility,
+            WeaponMainStat.Intellect => playerStats.Intellect,
+            _ => 0f
+        };
+    }
+
+    public int GetCurrentDamage()
+    {
+        float stat = GetMainStat();
+        float multiplier = 1f + stat * scalingDamage + percentBonusDamage;
+        float raw = (baseDamage + flatBonusDamage) * multiplier;
+        return Mathf.RoundToInt(raw);
+    }
 }

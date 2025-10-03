@@ -49,6 +49,7 @@ public class WeaponSlashing : MonoBehaviour
 
     [SerializeField] private Vector3 startPostion = new Vector3(0.5f, 0f, 0f);
     [SerializeField] private Vector3 startRotation = new Vector3(0.5f, 0f, 0f);
+    [SerializeField] private Vector3 startScale = new Vector3(1f, 1f, 1f);
     [SerializeField] bool canAttack = true;
     [SerializeField] bool isAttacking = false;
     [SerializeField] bool isFlying = false;
@@ -64,7 +65,7 @@ public class WeaponSlashing : MonoBehaviour
     bool flipped = false;
     float xScale = 0f;
 
-    int damageProjectile = 10;
+ 
 
     private void Awake()
     {
@@ -75,6 +76,7 @@ public class WeaponSlashing : MonoBehaviour
         weaponTargetAngle = weaponRise;
         startPostion = transform.localPosition;
         startRotation = transform.localEulerAngles;
+        startScale = transform.localScale;
 
         _parent = transform.parent;
         _startLocal = transform.localPosition;
@@ -89,7 +91,7 @@ public class WeaponSlashing : MonoBehaviour
         //FlyToTarget(closeTarget.CurrentTarget);
         //RotateToTarget();
 
-         // AttackSpeed is attacks/second
+        // AttackSpeed is attacks/second
         //if (Time.time < nextShotTime) return;
 
         weaponStats.PlayAttackSfx();
@@ -245,12 +247,12 @@ public class WeaponSlashing : MonoBehaviour
         dir.z = 0f;
         if (dir.x < 0f) 
         { 
-            transform.localScale = new Vector3(-1f, 1f, 1f);
+            transform.localScale = new Vector3(-1f, startScale.y, 1f);
             Flip(transform.localScale.x);
         }
         else
         {
-            transform.localScale = new Vector3(1f, 1f, 1f);
+            transform.localScale = new Vector3(1f, startScale.y, 1f);
             Flip(transform.localScale.x);
         }
         
@@ -353,13 +355,13 @@ public class WeaponSlashing : MonoBehaviour
         }
 
         //hasHit = true;
-
-        playerInventory?.NotifyOnHit(other.gameObject, ref damageProjectile);
+        int damage = GetDamage();
+        playerInventory?.NotifyOnHit(other.gameObject, ref damage);
 
         var hp = other.GetComponent<MonsterHealth>();
         if (hp != null)
         {
-            bool killed = hp.TakeDamage(damageProjectile);
+            bool killed = hp.TakeDamage(damage);
             if (killed) playerInventory?.NotifyOnKill(other.gameObject);
         }
 
@@ -381,4 +383,11 @@ public class WeaponSlashing : MonoBehaviour
             }
         }
     }
+
+    public int GetDamage()
+    {
+        int damage = weaponStats.GetCurrentDamage();
+        return damage;
     }
+
+}
