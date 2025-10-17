@@ -15,6 +15,7 @@ MonoBehaviour:
   id: 4
   displayName: Orb of Strength
   icon: {fileID: 21300000, guid: 4ea9299660479b34cafcf6a2a6c7351b, type: 3}
+  description: "Buff na si\u0142\u0119"
   maxStack: 1
   consumeOnPickup: 1
   effects:

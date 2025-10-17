@@ -1,3 +1,4 @@
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public class HealthBar : MonoBehaviour
@@ -13,6 +14,10 @@ public class HealthBar : MonoBehaviour
 
         if(!target) { 
             target = transform.root.gameObject;
+            if(target.tag != "Player" && target.tag != "Monster")
+            {
+                target = GameObject.FindWithTag("Player");
+            }
             //Debug.LogError("HealthBar: Target is not assigned.");
             //return;
         }
@@ -64,6 +69,19 @@ public class HealthBar : MonoBehaviour
         {
             currentHealth = health;
             localScale.x = currentHealth / maxHealth;
+            //transform.localScale = localScale;
+        }
+        if(LayerMask.NameToLayer("UI") == gameObject.layer)
+        {
+            var image = GetComponent<UnityEngine.UI.Image>();
+            if (image)
+            {
+
+                image.fillAmount = currentHealth / maxHealth;
+            }
+        }
+        else
+        {
             transform.localScale = localScale;
         }
 

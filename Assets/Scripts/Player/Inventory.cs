@@ -20,25 +20,26 @@ public class Inventory : MonoBehaviour
     public void Add(ItemDefinition def, int amount = 1)
     {
         // 1) Item jednorazowy zastosuj i NIE dodawaj do slots
-        if (def.consumeOnPickup)
+        if (def.consumeOnPickup)  // jeśli przedmiot jest jednorazowy
         {
-            foreach (var e in def.effects)
-                if (e.trigger == ItemTrigger.Passive)
+            foreach (var e in def.effects) // przejdź po efektach
+                if (e.trigger == ItemTrigger.Passive) // w Twoim case: ItemTrigger.OnApply // przy dodaniu natychmiast stosujesz efekt // np. GrantTimedBuffEffect
                     e.effect?.Apply(ownerStats, ownerHealth, amount, e.magnitude); // w Twoim case: GrantTimedBuffEffect.Apply  BuffManager.AddBuff(...)
+                    
             return;
         }
 
-        var s = slots.Find(x => x.def == def);
-        if (s == null) { s = new ItemStack { def = def, count = 0 }; slots.Add(s); }
+        var s = slots.Find(x => x.def == def); // znajdź stack z tym def
+        if (s == null) { s = new ItemStack { def = def, count = 0 }; slots.Add(s); } // jeśli nie ma, to dodaj nowy stack
 
-        int add = Mathf.Min(amount, def.maxStack - s.count);
-        if (add <= 0) return;
+        int add = Mathf.Min(amount, def.maxStack - s.count); // ile faktycznie można dodać
+        if (add <= 0) return; // nic nie dodano (stack pełny)
         s.count += add;
 
         // pasywy: dołóż różnicę
-        foreach (var e in def.effects)
-            if (e.trigger == ItemTrigger.Passive)
-                e.effect?.Apply(ownerStats, ownerHealth, add, e.magnitude);
+        foreach (var e in def.effects) // przejdź po efektach
+            if (e.trigger == ItemTrigger.Passive) // w Twoim case: ItemTrigger.OnApply // przy dodaniu natychmiast stosujesz efekt // np. GrantTimedBuffEffect
+                e.effect?.Apply(ownerStats, ownerHealth, add, e.magnitude); // w Twoim case: GrantTimedBuffEffect.Apply  BuffManager.AddBuff(...)
     }
 
     // USUWANIE (zmniejsz stack)
@@ -81,4 +82,7 @@ public class Inventory : MonoBehaviour
                 if (e.trigger == ItemTrigger.OnKill)
                     e.effect?.OnKill(ownerStats, ownerHealth, target, s.count, e.magnitude);
     }
+
+    public List<ItemStack> GetSlots() => slots;
+
 }

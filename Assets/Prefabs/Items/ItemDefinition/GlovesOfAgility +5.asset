@@ -15,6 +15,7 @@ MonoBehaviour:
   id: 4
   displayName: Gloves of Agility
   icon: {fileID: 21300000, guid: ce2ff5c3c66585d40b06e048b1ae52ca, type: 3}
+  description: "Zwi\u0119ksza zr\u0119czno\u015B\u0107 o 5"
   maxStack: 99
   consumeOnPickup: 0
   effects:

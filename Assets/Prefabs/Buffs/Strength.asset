@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GrantTimedBuffEffect
   buff: {fileID: 11400000, guid: b5f2a8ec9b824ac4cb7e29bf066d25da, type: 2}
   duration: 5
+  buffName: "Si\u0142a!!"
+  buffDescription: "Si\u0142a + 5 mordo"
+  buffIcon: {fileID: 21300000, guid: 4ea9299660479b34cafcf6a2a6c7351b, type: 3}
+  stackable: 0

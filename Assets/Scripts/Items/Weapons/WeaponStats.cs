@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization; // for FormerlySerializedAs
 
 /// <summary>
@@ -72,8 +73,11 @@ public class WeaponStats : MonoBehaviour
     [Header("SFX (optional)")]
     [SerializeField] private AudioSource sfx;
     [SerializeField] private AudioClip[] attackClips;
+    [SerializeField] private AudioClip attackClip;
+    [SerializeField] [Range(0f, 1f)] private float attackClipVolume = 1f;
     [SerializeField] private AudioClip hitClip;
-    [Range(0, 1)][SerializeField] private float volume = 1f;
+    [SerializeField] [Range(0f, 1f)] private float hitClipVolume = 1f;
+
     #endregion
 
     private Camera cam;
@@ -124,16 +128,17 @@ public class WeaponStats : MonoBehaviour
 
     public void PlayAttackSfx()
     {
-        if (!sfx || attackClips == null || attackClips.Length == 0) return;
+        if (!sfx) return;
         sfx.pitch = Random.Range(0.95f, 1.05f);
-        sfx.PlayOneShot(attackClips[Random.Range(0, attackClips.Length)], volume);
+        //sfx.PlayOneShot(attackClips[Random.Range(0, attackClips.Length)], volume);  // random clip from array
+        sfx.PlayOneShot(attackClip, attackClipVolume);
     }
 
     public void PlayHitSfx()
     {
         if (!sfx || !hitClip) return;
-        sfx.pitch = 1f;
-        sfx.PlayOneShot(hitClip, volume);
+        sfx.pitch = Random.Range(0.95f, 1.05f);
+        sfx.PlayOneShot(hitClip, hitClipVolume);
     }
     #endregion
 
@@ -164,4 +169,5 @@ public class WeaponStats : MonoBehaviour
         float raw = (baseDamage + flatBonusDamage) * multiplier;
         return Mathf.RoundToInt(raw);
     }
+
 }

@@ -94,7 +94,7 @@ public class WeaponSlashing : MonoBehaviour
         // AttackSpeed is attacks/second
         //if (Time.time < nextShotTime) return;
 
-        weaponStats.PlayAttackSfx();
+        //weaponStats.PlayAttackSfx();
         //nextShotTime = Time.time + cooldown;
         cooldownTimer += Time.deltaTime;
 
@@ -196,7 +196,7 @@ public class WeaponSlashing : MonoBehaviour
         //Debug.Log("Obrót ramienia: " + currentArm + " do " + targetAngle + " obrót broni: " + currentWeapon + " do " + weaponTargetAngle);
         if (Mathf.Abs(Mathf.DeltaAngle(currentArm, targetAngle)) <= 0.1f)
         {
-            if (targetAngle == armRise && weaponTargetAngle == weaponRise)
+            if (targetAngle == armRise && weaponTargetAngle == weaponRise) // reach attack angle
             {
                 dealDamage = true;
                 targetAngle = armDown;
@@ -205,7 +205,7 @@ public class WeaponSlashing : MonoBehaviour
                 //Debug.Log("Uderzenie");
                 //TryHit();
             }
-            else if (targetAngle == armDown && weaponTargetAngle == weaponDown)
+            else if (targetAngle == armDown && weaponTargetAngle == weaponDown) // reach down angle
             {
                 targetAngle = armReset;
                 weaponTargetAngle = weaponReset;
@@ -213,7 +213,7 @@ public class WeaponSlashing : MonoBehaviour
                 // Debug.Log("Reset");
                 //isAttacking = false;
             }
-            else if (targetAngle == armReset && weaponTargetAngle == weaponReset)
+            else if (targetAngle == armReset && weaponTargetAngle == weaponReset) // reach reset angle
             {
                 isAttacking = false;
                 isFlying = false;
@@ -229,13 +229,12 @@ public class WeaponSlashing : MonoBehaviour
     public void FlyToTarget()
     {
 
-
-        if (closeTarget.CurrentTarget && !isAttacking && !isFlying && !isReturning)
+        if (closeTarget.CurrentTarget && !isAttacking && !isFlying && !isReturning) // start fly
         {
             target = closeTarget.CurrentTarget.position;
             lastTarget = target;
         }
-        else if(!closeTarget.CurrentTarget)
+        else if(!closeTarget.CurrentTarget) // brak celu, leć do ostatniego
         {
             target = lastTarget;
         }
@@ -245,14 +244,14 @@ public class WeaponSlashing : MonoBehaviour
        // }
 
         // gdy zaczynamy atak/return – odczep, by ruch rodzica nie wpływał
-        if (!_detached) Detach();
+        if (!_detached) Detach(); 
 
 
-        Vector3 from = transform.position;
-        Vector3 to = target;
-        Vector3 dir = (to - from);
-        dir.z = 0f;
-        if (dir.x < 0f) 
+        Vector3 from = transform.position; // world-space
+        Vector3 to = target; 
+        Vector3 dir = (to - from); 
+        dir.z = 0f; // ignore Z
+        if (dir.x < 0f) // flip left
         { 
             transform.localScale = new Vector3(-1f, startScale.y, 1f);
             Flip(transform.localScale.x);
@@ -264,7 +263,7 @@ public class WeaponSlashing : MonoBehaviour
         }
         
 
-        if (isReturning)
+        if (isReturning) // return fly
         {
             float moveSpeed = SpeedFactor(baseMoveSpeed);
             //transform.localPosition = Vector3.MoveTowards(transform.localPosition, startPostion, moveSpeed * Time.deltaTime);
@@ -280,17 +279,19 @@ public class WeaponSlashing : MonoBehaviour
 
             //return; // już wystarczająco blisko
         }
-        else if(!isReturning)
+        else if(!isReturning) // attack fly
         {
             float moveSpeed = SpeedFactor(baseMoveSpeed);
             Vector3 stopPos = to - dir.normalized * standoff;
             transform.position = Vector3.MoveTowards(from, stopPos, moveSpeed * Time.deltaTime);
             if (transform.position == stopPos)
             {
-
+                //weaponStats.PlayAttackSfx();
                 canAttack = false;
                 
                 isAttacking = true;
+                
+
 
             }
         }
@@ -372,6 +373,7 @@ public class WeaponSlashing : MonoBehaviour
         {
             bool killed = hp.TakeDamage(damage);
             if (killed) playerInventory?.NotifyOnKill(other.gameObject);
+            weaponStats.PlayHitSfx();
         }
 
         // Knockback (use projectile flight dir if available)

@@ -15,6 +15,7 @@ public class ItemDefinition : ScriptableObject
     public string id;
     public string displayName;
     public Sprite icon;
+    public string description;
     public int maxStack = 99;
     public bool consumeOnPickup = false;
     public List<EffectEntry> effects = new();

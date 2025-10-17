@@ -46,4 +46,9 @@ public class SpawnerManager : MonoBehaviour
         }
     }
 
+    public int GetKillCount()
+    {
+        return killCount;
+    }
+
 }

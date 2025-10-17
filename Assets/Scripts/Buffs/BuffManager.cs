@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 [System.Serializable]
@@ -10,14 +11,20 @@ public class ActiveBuff
     public BuffEffect effect;
     public float timeLeft, duration;
     public float magnitude;
-    public int stacks;  
-    public ActiveBuff(BuffEffect effect, float duration, float magnitude, int stacks)
+    public int stacks;
+    public string name;
+    public string description;
+    public Sprite icon;
+    public ActiveBuff(BuffEffect effect, float duration, float magnitude, int stacks, string name, string description, Sprite icon)
     {
         this.effect = effect;
         this.duration = duration;
         this.timeLeft = duration;
         this.magnitude = magnitude;
         this.stacks = stacks;
+        this.name = name;
+        this.description = description;
+        this.icon = icon;
     }
 }
 
@@ -35,7 +42,7 @@ public class BuffManager : MonoBehaviour
             playerHealth = GetComponent<PlayerHealth>();
     }
 
-    public void AddBuff(BuffEffect buffEffect, float duration, float magnitude, int stacks = 1, bool refresh=true, bool stackable=false)
+    public void AddBuff(BuffEffect buffEffect, float duration, float magnitude, string name, string description, Sprite icon, int stacks = 1, bool refresh=true, bool stackable=false)
     {
 
         Debug.Log($"-1. BuffManager: Attempting to add buff {buffEffect.name}, Stacks: {stacks}, Duration: {duration}, Magnitude: {magnitude}");
@@ -58,19 +65,19 @@ public class BuffManager : MonoBehaviour
             if (add > 0)
             {
                 buff.stacks += add;
-                buffEffect.OnStart(playerStats, playerHealth, add, magnitude);
+                buffEffect.OnStart(playerStats, playerHealth, add, name, description, icon, magnitude);
                 Debug.Log($"4. BuffManager: Buff {buffEffect.name} stacks increased to {buff.stacks}");
                 return;
 
             }
-            ActiveBuff activeBuff = new ActiveBuff(buffEffect, duration, magnitude, stacks);
+            ActiveBuff activeBuff = new ActiveBuff(buffEffect, duration, magnitude, stacks, name, description, icon );
             activeBuffsList.Add(activeBuff);
-            buffEffect.OnStart(playerStats, playerHealth, stacks, magnitude);
+            buffEffect.OnStart(playerStats, playerHealth, stacks, name, description, icon, magnitude);
             Debug.Log($"5. BuffManager: Added new buff {buffEffect.name}, Stacks: {stacks}, Duration: {duration}, Magnitude: {magnitude}");
         }
-        ActiveBuff newBuff = new(buffEffect, duration, magnitude, stacks);
+        ActiveBuff newBuff = new(buffEffect, duration, magnitude, stacks, name, description, icon);
         activeBuffsList.Add(newBuff);
-        buffEffect.OnStart(playerStats, playerHealth, stacks, magnitude);
+        buffEffect.OnStart(playerStats, playerHealth, stacks, name, description, icon, magnitude);
 
         Debug.Log($"6. BuffManager: Added new buff {buffEffect.name}, Stacks: {stacks}, Duration: {duration}, Magnitude: {magnitude}");
 
@@ -103,7 +110,7 @@ public class BuffManager : MonoBehaviour
             buff.timeLeft -= deltaTime;
             if (buff.timeLeft <= 0)
             {
-                buff.effect.OnEnd(playerStats, playerHealth, buff.stacks, buff.magnitude);
+                buff.effect.OnEnd(playerStats, playerHealth, buff.stacks, buff.name, buff.description, buff.icon, buff.magnitude);
                 activeBuffsList.RemoveAt(i);
                 Debug.Log($"BuffManager: Buff {buff.effect.name} ended.");
             }
@@ -114,10 +121,13 @@ public class BuffManager : MonoBehaviour
     {
         foreach (var buff in activeBuffsList)
         {
-            buff.effect.OnEnd(playerStats, playerHealth, buff.stacks, buff.magnitude);
+            buff.effect.OnEnd(playerStats, playerHealth, buff.stacks, buff.name, buff.description, buff.icon, buff.magnitude);
         }
         activeBuffsList.Clear();
         Debug.Log("BuffManager: All buffs cleared.");
     }
+
+    public List<ActiveBuff> GetActiveBuffs() => activeBuffsList;
+
 
 }
